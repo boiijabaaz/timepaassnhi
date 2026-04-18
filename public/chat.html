@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chatbot</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white flex flex-col h-screen">
+
+<div class="p-4 text-xl font-bold">I'm Here For You🫵🫵!!</div>
+
+<div id="chatbox" class="flex-1 p-4 overflow-y-auto border border-gray-700 rounded"></div>
+
+<div class="p-4 flex gap-2">
+  <input id="msg" class="flex-1 p-2 rounded text-black" placeholder="Type message">
+  <button onclick="send()" class="bg-purple-500 px-4 rounded">Send</button>
+</div>
+
+<script>
+// ❌ API KEY REMOVE kar diya (IMPORTANT)
+
+async function send(){
+  let msg = document.getElementById("msg").value;
+  if (!msg.trim()) return;
+
+  document.getElementById("chatbox").innerHTML += 
+    `<p class="text-blue-400 mb-2"><strong>You:</strong> ${msg}</p>`;
+  
+  document.getElementById("msg").value = "";
+
+  try {
+    const response = await fetch("/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: msg })
+    });
+
+    const data = await response.json();
+
+    const reply = data.reply || "No response";
+
+    document.getElementById("chatbox").innerHTML += 
+      `<p class="text-green-400 mb-2"><strong>Bot:</strong> ${reply}</p>`;
+
+    document.getElementById("chatbox").scrollTop = 
+      document.getElementById("chatbox").scrollHeight;
+
+  } catch (error) {
+    document.getElementById("chatbox").innerHTML += 
+      `<p class="text-red-400 mb-2"><strong>Error:</strong> ${error.message}</p>`;
+  }
+}
+
+document.getElementById("msg").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") send();
+});
+</script>
+
+</body>
+</html>

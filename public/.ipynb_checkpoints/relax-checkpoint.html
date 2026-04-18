@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Relax</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body {
+  background: radial-gradient(circle at top, #1e3a8a, #0f172a);
+  color: white;
+}
+
+.circle {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #60a5fa, #7c3aed);
+  transition: transform 4s ease-in-out;
+  box-shadow: 0 0 40px rgba(124,58,237,0.6);
+}
+</style>
+
+</head>
+
+<body class="flex flex-col items-center justify-center h-screen text-center">
+
+<h1 class="text-2xl mb-4">Relax & Breathe</h1>
+
+<div id="circle" class="circle mb-6"></div>
+
+<h2 id="status" class="mb-2">Ready</h2>
+<p id="timer" class="mb-6">0s</p>
+
+<div class="flex gap-4 mb-6">
+  <button onclick="setTime(4)" class="bg-white/20 px-3 py-1 rounded">Fast</button>
+  <button onclick="setTime(6)" class="bg-white/20 px-3 py-1 rounded">Normal</button>
+</div>
+
+<div class="flex gap-4">
+  <button onclick="startBreathing()" class="bg-purple-500 px-4 py-2 rounded">Start</button>
+  <button onclick="stopBreathing()" class="bg-red-500 px-4 py-2 rounded">Stop</button>
+</div>
+
+<script>
+let duration = 4;
+let running = false;
+let timeoutId;
+let countdownId;
+
+function setTime(t){
+  duration = t;
+}
+
+function startBreathing(){
+  if(running) return;
+  running = true;
+
+  const circle = document.getElementById("circle");
+  const status = document.getElementById("status");
+  const timer = document.getElementById("timer");
+
+  let inhale = true;
+  let timeLeft = duration;
+
+  function cycle(){
+    if(!running) return;
+
+    timeLeft = duration;
+
+    if(inhale){
+      circle.style.transform = "scale(1.5)";
+      status.innerText = "Breathe In";
+    } else {
+      circle.style.transform = "scale(1)";
+      status.innerText = "Breathe Out";
+    }
+
+    inhale = !inhale;
+
+    clearInterval(countdownId);
+    countdownId = setInterval(() => {
+      if(timeLeft >= 0){
+        timer.innerText = timeLeft + "s";
+        timeLeft--;
+      }
+    }, 1000);
+
+    timeoutId = setTimeout(cycle, duration * 1000);
+  }
+
+  cycle();
+}
+
+function stopBreathing(){
+  running = false;
+  clearTimeout(timeoutId);
+  clearInterval(countdownId);
+
+  document.getElementById("circle").style.transform = "scale(1)";
+  document.getElementById("status").innerText = "Stopped";
+  document.getElementById("timer").innerText = "0s";
+}
+</script>
+
+</body>
+</html>
