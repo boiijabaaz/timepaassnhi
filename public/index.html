@@ -1,210 +1,196 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Mindo Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <script src="https://cdn.tailwindcss.com"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
-body {
-  background: linear-gradient(135deg, #c4b5fd, #e9d5ff);
-}
+  body {
+    margin: 0;
+    /* Added a fallback lavender gradient underneath the image */
+    background: url("brain.png") no-repeat center center, linear-gradient(135deg, #c4a7e7 0%, #e0d4f5 100%);
+    background-size: cover;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: white;
+    overflow-x: hidden;
+  }
 
-.glass {
-  background: rgba(255,255,255,0.25);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.3);
-}
+  /* Cleaner, more accurate glassmorphism styling */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
 
-.soft {
-  background: rgba(255,255,255,0.15);
-  border-radius: 15px;
-}
+  .glass-panel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-btn {
+    background: transparent;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+  }
+  .nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .nav-btn.active {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .report-item {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    transition: 0.2s;
+  }
+  .report-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Custom scrollbar for webkit to keep it clean */
+  ::-webkit-scrollbar { width: 0px; }
 </style>
-
 </head>
+<body class="p-6 md:p-8 flex flex-col h-screen">
 
-<body class="p-6 font-sans">
+  <nav class="flex justify-between items-center mb-8">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-[#2A2A2A] flex items-center justify-center rounded-full text-sm font-bold">M</div>
+      <h2 class="text-xl font-semibold tracking-wide">Mindo</h2>
+    </div>
+    
+    <div class="flex gap-2 bg-white/10 p-1.5 rounded-full border border-white/20 backdrop-blur-md">
+  <a href="mood.html" class="nav-btn px-5 py-1.5 text-sm font-medium active">Mood Tracker</a>
+  <a href="/chat.html" class="nav-btn px-5 py-1.5 text-sm font-medium border-transparent hover:border-white/40">ChatBot</a>
+  <a href="/relax.html" class="nav-btn px-5 py-1.5 text-sm font-medium border-transparent hover:border-white/40">Relax</a>
+</div>
+    
+    <div class="w-10 h-10 bg-white/20 rounded-full border border-white/40 backdrop-blur-md cursor-pointer"></div>
+  </nav>
 
-<div class="glass p-6">
+  <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-6 relative">
 
-<!-- NAVBAR -->
+    <div class="flex flex-col justify-between h-full z-10">
+      <div>
+        <h1 class="text-4xl md:text-5xl font-light mb-2">Hello, <span class="font-bold">User 👋</span></h1>
+        <h2 class="text-2xl md:text-3xl font-medium opacity-90 mb-10">How are you feeling today?</h2>
 
-<div class="flex justify-between items-center mb-6">
-  <div class="flex items-center gap-2">
-    <div class="w-8 h-8 bg-black text-white flex items-center justify-center rounded-full">M</div>
-    <h2 class="text-xl font-semibold">Mindo</h2>
+        <div class="glass-panel p-4 inline-block min-w-[150px]">
+          <p class="text-xs font-medium opacity-80 mb-1">Goal Progress</p>
+          <h2 class="text-2xl font-bold">65%</h2>
+        </div>
+      </div>
+
+      <div class="glass-panel p-5 mt-auto">
+        <h3 class="mb-4 text-sm font-semibold opacity-90">Reports</h3>
+        <div class="report-item p-3 mb-2 text-sm text-white/90">Arkansh Singh-Always chill</div>
+        <div class="report-item p-3 mb-2 text-sm text-white/90">Spandan Panda-Studios Child</div>
+        <div class="report-item p-3 mb-2 text-sm text-white/90">Dipaditya Roy-Pro Gamer</div>
+      
+      </div>
+    </div>
+
+    <div class="relative flex flex-col justify-end items-center h-full min-h-[400px]">
+      
+      <div class="absolute right-4 top-1/3 glass-panel p-4 min-w-[140px] z-20">
+        <p class="text-xs font-medium opacity-80 mb-1">Stress Level</p>
+        <h2 class="text-2xl font-bold">45%</h2>
+      </div>
+      <div class="absolute right-12 top-[45%] glass-panel p-4 min-w-[140px] z-20">
+        <p class="text-xs font-medium opacity-80 mb-1">Focus Power</p>
+        <h2 class="text-2xl font-bold">42 min</h2>
+      </div>
+
+      <div class="glass-panel p-5 w-full max-w-sm text-center mb-0 backdrop-blur-xl bg-white/20">
+        <h3 class="mb-2 text-sm font-semibold opacity-90">Upcoming Session</h3>
+        <h1 class="text-3xl md:text-4xl font-bold drop-shadow-md">6 hr 52 min</h1>
+      </div>
+    </div>
+
+    <div class="flex flex-col justify-between h-full z-10 gap-6">
+      
+      <div class="glass-panel p-5 flex-grow flex flex-col">
+        <h3 class="mb-4 text-sm font-semibold opacity-90">Health Improvement</h3>
+        <div class="flex-grow relative w-full h-full min-h-[160px]">
+          <canvas id="chart"></canvas>
+        </div>
+      </div>
+
+      <div class="glass-panel p-5">
+        <h3 class="mb-5 text-sm font-semibold opacity-90">Active Path</h3>
+
+        <div class="mb-4">
+          <div class="flex justify-between text-xs mb-2 opacity-90"><p>Meditation</p></div>
+          <div class="bg-white/30 h-2 rounded-full overflow-hidden">
+            <div class="bg-[#9333ea] h-full rounded-full w-[65%]"></div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <div class="flex justify-between text-xs mb-2 opacity-90"><p>Exercise</p></div>
+          <div class="bg-white/30 h-2 rounded-full overflow-hidden">
+            <div class="bg-[#9333ea] h-full rounded-full w-[85%]"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs mb-2 opacity-90"><p>Journaling</p></div>
+          <div class="bg-white/30 h-2 rounded-full overflow-hidden">
+            <div class="bg-[#9333ea] h-full rounded-full w-[50%]"></div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
   </div>
 
-  <div class="flex gap-3">
-    <a href="mood.html" class="px-4 py-1 bg-white/40 rounded-full">Mood Tracker</a>
-    <a href="/chat.html" class="px-4 py-1 bg-white/20 rounded-full">ChatBot</a>
-    <a href="relax.html" class="px-4 py-1 bg-white/20 rounded-full">Relax</a>
-    <a href="Progress.html" class="px-4 py-1 bg-white/20 rounded-full">Progress</a>
-  </div>
-
-  <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
-</div>
-
-<!-- TOP SECTION -->
-
-<div class="grid grid-cols-3 gap-6">
-
-<div class="col-span-2">
-
-  <h1 class="text-4xl font-semibold mb-4">
-    Hello, <span class="font-bold">User 👋</span><br>
-    How are you feeling today?
-  </h1>
-
-  <div class="relative">
-
-```
-<img src="brain.jpg" class="w-72 mx-auto">
-
-<div class="absolute top-0 left-0 glass p-4">
-  <p class="text-sm">Goal Progress</p>
-  <h2 class="text-xl font-bold">65%</h2>
-</div>
-
-<div class="absolute top-10 right-0 glass p-4">
-  <p class="text-sm">Stress Level</p>
-  <h2 id="stress" class="text-xl font-bold">--%</h2>
-</div>
-
-<div class="absolute bottom-0 right-10 glass p-4">
-  <p class="text-sm">Focus Power</p>
-  <h2 class="text-xl font-bold">42 min</h2>
-</div>
-```
-
-  </div>
-
-</div>
-
-<!-- GRAPH -->
-
-<div class="glass p-4">
-  <h3 class="mb-2 font-semibold">Health Improvement</h3>
-  <canvas id="chart"></canvas>
-</div>
-
-</div>
-
-<!-- BOTTOM -->
-
-<div class="grid grid-cols-3 gap-6 mt-6">
-
-<div class="glass p-4">
-  <h3 class="mb-3 font-semibold">Reports</h3>
-  <div class="soft p-2 mb-2">Cognitive Therapy - Dr. Jasmin</div>
-  <div class="soft p-2 mb-2">Stress Management - Dr. Jonshon</div>
-  <div class="soft p-2 mb-2">Sleep Therapy - Dr. Samira</div>
-  <div class="soft p-2">Emotional Wellness - Dr. K Sato</div>
-</div>
-
-<div class="glass p-4">
-  <h3 class="mb-3 font-semibold">Upcoming Session</h3>
-  <h1 class="text-3xl font-bold">6 hr 52 min</h1>
-</div>
-
-<div class="glass p-4">
-  <h3 class="mb-3 font-semibold">Active Path</h3>
-
-  <p>Meditation</p>
-  <div class="bg-white/30 h-2 rounded-full mb-2">
-    <div class="bg-purple-500 h-2 rounded-full" style="width:50%"></div>
-  </div>
-
-  <p>Exercise</p>
-  <div class="bg-white/30 h-2 rounded-full mb-2">
-    <div class="bg-purple-500 h-2 rounded-full" style="width:85%"></div>
-  </div>
-
-  <p>Journaling</p>
-  <div class="bg-white/30 h-2 rounded-full">
-    <div class="bg-purple-500 h-2 rounded-full" style="width:60%"></div>
-  </div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- SCRIPT -->
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDNptTXPybcivbPxar25J8Bcq6JJj0b7LU",
-  authDomain: "stressguard-a191b.firebaseapp.com",
-  projectId: "stressguard-a191b",
-  storageBucket: "stressguard-a191b.firebasestorage.app",
-  messagingSenderId: "1031149983572",
-  appId: "1:1031149983572:web:6be50ee970a90fc1e99ac1"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// CHART
-let chart = new Chart(document.getElementById("chart"), {
+<script>
+const ctx = document.getElementById("chart").getContext('2d');
+new Chart(ctx, {
   type: 'line',
   data: {
-    labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     datasets: [{
-      data: [],
-      borderColor: "#7c3aed",
-      tension: 0.4,
-      fill: false
+      data: [20, 90, 30, 50, 15, 35, 60],
+      borderColor: "#a855f7",
+      backgroundColor: "transparent",
+      borderWidth: 2.5,
+      pointBackgroundColor: "#a855f7",
+      pointBorderColor: "#fff",
+      pointBorderWidth: 1.5,
+      pointRadius: 4,
+      tension: 0.4, // Creates the smooth curve
     }]
   },
   options: {
-    plugins: {legend: {display:false}},
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false }
+    },
     scales: {
-      x: {display:true},
-      y: {display:false}
+      x: {
+        grid: { display: true, color: "rgba(255,255,255,0.1)", drawBorder: false },
+        ticks: { color: "rgba(255,255,255,0.8)", font: { size: 11, family: "sans-serif" } }
+      },
+      y: {
+        grid: { display: false },
+        ticks: { display: false } // Hides the Y axis text just like the image
+      }
     }
   }
 });
-
-// LOAD DATA
-async function loadDashboard() {
-
-  const snapshot = await getDocs(collection(db, "moods"));
-
-  let moods = [];
-
-  snapshot.forEach(doc => {
-    moods.push(doc.data().value);
-  });
-
-  if(moods.length === 0) return;
-
-  let last = moods.slice(-7);
-
-  chart.data.datasets[0].data = last;
-  chart.update();
-
-  let avg = last.reduce((a,b)=>a+b,0) / last.length;
-  let stress = Math.round((5 - avg) * 20);
-
-  document.getElementById("stress").innerText = stress + "%";
-}
-
-loadDashboard();
-
 </script>
-
 </body>
 </html>
