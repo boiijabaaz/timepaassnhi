@@ -1,29 +1,33 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import fetch from "node-fetch";
 
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-// ✅ Middlewares
+// ✅ Middleware
 app.use(cors());
 app.use(express.json());
-
-// ✅ SERVE FRONTEND (MOST IMPORTANT FIX)
 app.use(express.static("public"));
 
-// ✅ Optional: default route (index.html open karega)
+// ✅ Debug check (important)
+if (!process.env.GROQ_API_KEY) {
+  console.error("❌ GROQ_API_KEY missing in .env");
+  process.exit(1);
+}
+
+// ✅ Default route
 app.get("/", (req, res) => {
   res.sendFile(process.cwd() + "/public/index.html");
 });
 
-// ✅ CHAT API
+// ✅ Chat API
 app.post("/chat", async (req, res) => {
   const { message } = req.body;
 
-  console.log("🔥 Request:", message);
+  console.log("🔥 User:", message);
 
   try {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -33,7 +37,7 @@ app.post("/chat", async (req, res) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+        model: "llama-3.3-70b-versatile", // stable model
         messages: [
           {
             role: "system",
@@ -48,23 +52,23 @@ app.post("/chat", async (req, res) => {
     });
 
     const data = await response.json();
-    console.log("Groq:", data);
+    console.log("Groq Response:", data);
 
     if (data.error) {
-      return res.json({ reply: data.error.message });
+      return res.json({ reply: "❌ " + data.error.message });
     }
 
     res.json({
-      reply: data.choices?.[0]?.message?.content || "No reply"
+      reply: data.choices?.[0]?.message?.content || "No response"
     });
 
   } catch (error) {
-    console.error(error);
-    res.json({ reply: "Server error" });
+    console.error("Server Error:", error);
+    res.json({ reply: "⚠️ Server error" });
   }
 });
 
-// ✅ START SERVER
-app.listen(3000, "0.0.0.0", () => {
-  console.log("✅ Server running on port 3000");
+// ✅ Start server
+app.listen(PORT, () => {
+  console.log(`✅ Server running at http://localhost:${PORT}`);
 });
